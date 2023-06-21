@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import BookStore from "./Components/BookStore";
 import { Store } from "./Types/Interfaces";
 import axios from "axios";
-import Book from "./Components/Book";
 
 function App() {
   const [stores, setStores] = useState<Store[]>([]);
@@ -28,7 +27,7 @@ function App() {
   return (
     <div className="">
       <header>
-        <p className="m-2 text-sm text-red-700">hey{error}</p>
+        <p className="my-1 mx-4 text-sm text-red-700 h-4">{error}</p>
         {stores.map((store) => (
           <BookStore storeData={store} />
         ))}
