@@ -1,10 +1,28 @@
+import useStoreData from "../Hooks/useStoreData";
 import Book from "./Book";
 import { StoreProps } from "../Types/Interfaces";
 import moment from "moment";
 
 export default function BookStore({ store }: StoreProps) {
+  const { storeData } = useStoreData();
   const formatDate = (date: string): string => {
     return moment(new Date(date)).format("DD.MM.YYYY");
+  };
+
+  const getCountryCode = () => {
+    let countryCode;
+    const countryId = store.relationships.countries?.data.id;
+    const country = storeData?.included.filter(
+      (item) => item.type === "countries" && item.id === countryId
+    );
+    if (country && country[0].attributes && "code" in country[0].attributes) {
+      countryCode = country[0].attributes.code;
+    }
+    return countryCode?.toLocaleLowerCase() || "";
+  };
+
+  const getFlagUrl = (countryCode: string) => {
+    return `https://flagcdn.com/${countryCode}.svg`;
   };
 
   return (
@@ -34,7 +52,11 @@ export default function BookStore({ store }: StoreProps) {
             {store.attributes.website}
           </a>
         </div>
-        <div>Placeholder for flag</div>
+        <img
+          src={getFlagUrl(getCountryCode())}
+          alt={getCountryCode()}
+          className="h-4"
+        />
       </div>
     </div>
   );
