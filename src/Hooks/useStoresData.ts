@@ -1,19 +1,19 @@
 import { useEffect, useContext } from "react";
-import StoreDataContext from "../Context/StoreDataProvider";
+import StoresDataContext from "../Context/StoresDataProvider";
 import axios from "axios";
 
-export default function useStoreData() {
-  const { setStoreData } = useContext(StoreDataContext);
+export default function useStoresData() {
+  const { setStoresData } = useContext(StoresDataContext);
 
   useEffect(() => {
-    fetchStoreData();
+    fetchStoresData();
   }, []);
 
-  const fetchStoreData = async () => {
+  const fetchStoresData = async () => {
     try {
       const storesRes = await axios.get("http://localhost:3000/stores");
-      if (storesRes.data && setStoreData) {
-        setStoreData(storesRes.data);
+      if (storesRes.data && setStoresData) {
+        setStoresData(storesRes.data);
       }
     } catch (err) {
       let message;
@@ -23,5 +23,5 @@ export default function useStoreData() {
     }
   };
 
-  return useContext(StoreDataContext);
+  return useContext(StoresDataContext);
 }

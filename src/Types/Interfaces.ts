@@ -1,15 +1,15 @@
-export interface StoreDataProviderProps {
+export interface StoresDataProviderProps {
   children: React.ReactNode;
 }
 
-export interface StoreDataContextType {
-  storeData?: StoreData | null;
-  setStoreData?:
-    | React.Dispatch<React.SetStateAction<StoreData>>
+export interface StoresDataContextType {
+  storesData?: StoresData | null;
+  setStoresData?:
+    | React.Dispatch<React.SetStateAction<StoresData>>
     | React.Dispatch<React.SetStateAction<null>>;
 }
 
-export interface StoreData {
+export interface StoresData {
   data: Store[];
   included: (Country | Author | Book)[];
   jsonapi: { version: string };
@@ -38,24 +38,28 @@ export interface StoreAttributes {
 export interface Country {
   id: string;
   type: "countries";
-  attributes?: { code: string };
+  attributes: { code: string };
 }
 
 export interface Author {
   id: string;
   type: "authors";
-  attributes?: { fullName: string };
+  attributes: { fullName: string };
+}
+
+export interface BookProps {
+  bookData: Book;
 }
 
 export interface Book {
   type: "books";
   id: string;
-  attributes?: { name: string; copiesSold: number };
-  relationships?: Relationships;
+  attributes: { name: string; copiesSold: number };
+  relationships: Relationships;
 }
 
 export interface Relationships {
-  countries?: { data: Country };
-  author?: { data: Author };
-  books: { data: Book[] };
+  countries?: { data: { id: string; type: "countries" } };
+  author?: { data: { id: string; type: "authors" } };
+  books?: { data: { id: string; type: "books" }[] };
 }

@@ -1,10 +1,10 @@
-import useStoreData from "../Hooks/useStoreData";
+import useStoresData from "../Hooks/useStoresData";
 import Book from "./Book";
-import { StoreProps } from "../Types/Interfaces";
+import { StoreProps, Book as BookType } from "../Types/Interfaces";
 import moment from "moment";
 
 export default function BookStore({ store }: StoreProps) {
-  const { storeData } = useStoreData();
+  const { storesData } = useStoresData();
   const formatDate = (date: string): string => {
     return moment(new Date(date)).format("DD.MM.YYYY");
   };
@@ -12,7 +12,7 @@ export default function BookStore({ store }: StoreProps) {
   const getCountryCode = () => {
     let countryCode;
     const countryId = store.relationships.countries?.data.id;
-    const country = storeData?.included.filter(
+    const country = storesData?.included.filter(
       (item) => item.type === "countries" && item.id === countryId
     );
     if (country && country[0].attributes && "code" in country[0].attributes) {
@@ -23,6 +23,28 @@ export default function BookStore({ store }: StoreProps) {
 
   const getFlagUrl = (countryCode: string) => {
     return `https://flagcdn.com/${countryCode}.svg`;
+  };
+
+  const getTwoBestSellingBooks = (): BookType[] => {
+    if (!store.relationships.books) {
+      return [];
+    }
+    const storeBookIds = store.relationships.books.data.map((book) => book.id);
+    const allBooks = storesData?.included.filter(
+      (item) => item.type === "books"
+    ) as BookType[];
+    const storeBooks = allBooks?.filter((book) =>
+      storeBookIds?.includes(book.id)
+    );
+    if (!storeBooks) return [];
+    if (storeBooks.length < 3) {
+      return storeBooks;
+    }
+    storeBooks?.sort(
+      (book, nextBook) =>
+        nextBook.attributes.copiesSold - book.attributes.copiesSold
+    );
+    return storeBooks.slice(0, 2);
   };
 
   return (
@@ -40,8 +62,13 @@ export default function BookStore({ store }: StoreProps) {
           </div>
           <div>
             <div className="font-semibold">Best-selling books</div>
-            <Book />
-            <Book />
+            {getTwoBestSellingBooks().length > 0 ? (
+              getTwoBestSellingBooks().map((book) => (
+                <Book key={book.id} bookData={book} />
+              ))
+            ) : (
+              <div className="text-gray-500">No data available</div>
+            )}
           </div>
         </div>
       </div>

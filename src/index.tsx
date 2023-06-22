@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { StoreDataProvider } from "./Context/StoreDataProvider";
+import { StoresDataProvider } from "./Context/StoresDataProvider";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
@@ -10,9 +10,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <StoreDataProvider>
+    <StoresDataProvider>
       <App />
-    </StoreDataProvider>
+    </StoresDataProvider>
   </React.StrictMode>
 );
 
