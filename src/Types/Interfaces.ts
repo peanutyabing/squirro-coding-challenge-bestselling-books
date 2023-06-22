@@ -64,3 +64,7 @@ export interface Relationships {
   author?: { data: { id: string; type: "authors" } };
   books?: { data: { id: string; type: "books" }[] };
 }
+
+export interface RatingProps {
+  rating: number;
+}

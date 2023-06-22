@@ -1,5 +1,6 @@
 import useStoresData from "../Hooks/useStoresData";
 import Book from "./Book";
+import Rating from "./Rating";
 import {
   StoreProps,
   Book as BookType,
@@ -72,10 +73,10 @@ export default function BookStore({ store }: StoreProps) {
           alt={store.attributes.name}
           className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover"
         />
-        <div className="w-full">
+        <div className="w-full flex flex-col justify-between gap-4">
           <div className="sm:flex justify-between">
             <div className="font-bold text-2xl">{store.attributes.name}</div>
-            <div>Placeholder for interactive rating</div>
+            <Rating rating={store.attributes.rating} />
           </div>
           <div>
             <div className="font-semibold">Best-selling books</div>
