@@ -1,12 +1,23 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { RatingProps } from "../Types/Interfaces";
 import axios from "axios";
 import starFilled from "../Assets/star-filled.svg";
 import starUnfilled from "../Assets/star-unfilled.svg";
 
-export default function Rating({ rating, storeId }: RatingProps) {
+export default function Rating({ storeId }: RatingProps) {
+  const [rating, setRating] = useState(0);
   const [userRating, setUserRating] = useState(0);
   const userClicked = useRef(false);
+
+  useEffect(() => {
+    getRating();
+  }, [userRating]);
+
+  const getRating = async () => {
+    const storeRes = await axios.get(`http://localhost:3000/stores/${storeId}`);
+    const rating = storeRes.data.data.attributes.rating;
+    setRating(rating);
+  };
 
   const generateRatingBar = (rating: number) => {
     const ratingBar = [];
@@ -29,10 +40,24 @@ export default function Rating({ rating, storeId }: RatingProps) {
           onClick={() => {
             userClicked.current = true;
             setUserRating(i + 1);
-            // axios.put(`http://localhost:3000/stores/${storeId}`, {
-            //   rating: i + 1,
-            // });
-            // It seems that the mock server is not configured to handle PUT requests (status 500).
+            axios.put(
+              `http://localhost:3000/stores/${storeId}`,
+              {
+                data: {
+                  type: "stores",
+                  id: storeId,
+                  attributes: {
+                    rating: i + 1,
+                  },
+                },
+              },
+              {
+                headers: {
+                  "Content-Type": "application/vnd.api+json",
+                  Accept: "application/vnd.api+json",
+                },
+              }
+            );
           }}
         />
       );
@@ -45,17 +70,35 @@ export default function Rating({ rating, storeId }: RatingProps) {
           src={starUnfilled}
           alt="⭐"
           onMouseEnter={() => {
+            userClicked.current = false;
             setUserRating(rating + i + 1);
           }}
           onMouseLeave={() => {
-            setUserRating(0);
+            if (userClicked.current === false) {
+              setUserRating(0);
+            }
           }}
           onClick={() => {
+            userClicked.current = true;
             setUserRating(rating + i + 1);
-            // axios.put(`http://localhost:3000/stores/${storeId}`, {
-            //   rating: rating + i + 1,
-            // });
-            // It seems that the mock server is not configured to handle PUT requests (status 500)
+            axios.put(
+              `http://localhost:3000/stores/${storeId}`,
+              {
+                data: {
+                  type: "stores",
+                  id: storeId,
+                  attributes: {
+                    rating: rating + i + 1,
+                  },
+                },
+              },
+              {
+                headers: {
+                  "Content-Type": "application/vnd.api+json",
+                  Accept: "application/vnd.api+json",
+                },
+              }
+            );
           }}
         />
       );

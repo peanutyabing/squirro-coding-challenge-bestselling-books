@@ -76,7 +76,7 @@ export default function BookStore({ store }: StoreProps) {
         <div className="w-full flex flex-col justify-between gap-4">
           <div className="sm:flex justify-between">
             <div className="font-bold text-2xl">{store.attributes.name}</div>
-            <Rating rating={store.attributes.rating} storeId={store.id} />
+            <Rating storeId={store.id} />
           </div>
           <div className="border-[1px] border-neutral-200 rounded-sm p-2">
             <div className="font-semibold mb-1">Best-selling books</div>
