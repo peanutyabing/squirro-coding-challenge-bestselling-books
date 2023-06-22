@@ -1,3 +1,8 @@
+export interface StoreData {
+  data: Store[];
+  included: (Country | Author | Book)[];
+}
+
 export interface StoreProps {
   storeData: Store;
 }
@@ -6,11 +11,7 @@ export interface Store {
   type: "stores";
   id: string;
   attributes: StoreAttributes;
-  relationships: {
-    countries?: Country;
-    author?: Author;
-    books: Books;
-  };
+  relationships: Relationships;
 }
 
 export interface StoreAttributes {
@@ -22,24 +23,26 @@ export interface StoreAttributes {
 }
 
 export interface Country {
-  data: {
-    id: string;
-    type: "countries";
-  };
+  id: string;
+  type: "countries";
+  attributes?: { code: string };
 }
 
 export interface Author {
-  data: {
-    id: string;
-    type: "authors";
-  };
-}
-
-export interface Books {
-  data: Book[];
+  id: string;
+  type: "authors";
+  attributes?: { fullName: string };
 }
 
 export interface Book {
-  id: string;
   type: "books";
+  id: string;
+  attributes?: { name: string; copiesSold: number };
+  relationships?: Relationships;
+}
+
+export interface Relationships {
+  countries?: { data: Country };
+  author?: { data: Author };
+  books: { data: Book[] };
 }
