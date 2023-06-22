@@ -56,6 +56,7 @@ export interface Book {
   id: string;
   attributes: { name: string; copiesSold: number };
   relationships: Relationships;
+  authorName?: string;
 }
 
 export interface Relationships {

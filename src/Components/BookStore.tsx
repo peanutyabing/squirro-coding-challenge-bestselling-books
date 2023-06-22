@@ -1,6 +1,10 @@
 import useStoresData from "../Hooks/useStoresData";
 import Book from "./Book";
-import { StoreProps, Book as BookType } from "../Types/Interfaces";
+import {
+  StoreProps,
+  Book as BookType,
+  Author as AuthorType,
+} from "../Types/Interfaces";
 import moment from "moment";
 
 export default function BookStore({ store }: StoreProps) {
@@ -38,13 +42,26 @@ export default function BookStore({ store }: StoreProps) {
     );
     if (!storeBooks) return [];
     if (storeBooks.length < 3) {
+      addAuthorToStoreBooks(storeBooks);
       return storeBooks;
     }
     storeBooks?.sort(
       (book, nextBook) =>
         nextBook.attributes.copiesSold - book.attributes.copiesSold
     );
+    addAuthorToStoreBooks(storeBooks);
     return storeBooks.slice(0, 2);
+  };
+
+  const addAuthorToStoreBooks = (books: BookType[]) => {
+    const allAuthors = storesData?.included.filter(
+      (item) => item.type === "authors"
+    ) as AuthorType[];
+    books.forEach((book) => {
+      const authorId = book.relationships.author?.data.id;
+      const author = allAuthors.filter((author) => author.id === authorId)[0];
+      book.authorName = author.attributes.fullName;
+    });
   };
 
   return (
