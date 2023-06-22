@@ -67,4 +67,5 @@ export interface Relationships {
 
 export interface RatingProps {
   rating: number;
+  storeId: string;
 }

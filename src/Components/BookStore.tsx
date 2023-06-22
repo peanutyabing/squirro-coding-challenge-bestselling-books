@@ -66,7 +66,7 @@ export default function BookStore({ store }: StoreProps) {
   };
 
   return (
-    <div className="border-2 my-2 mx-4 p-2">
+    <div className="border-t-2 my-2 mx-4 p-2">
       <div className="flex gap-6 my-4 items-center">
         <img
           src={store.attributes.storeImage}
@@ -76,10 +76,10 @@ export default function BookStore({ store }: StoreProps) {
         <div className="w-full flex flex-col justify-between gap-4">
           <div className="sm:flex justify-between">
             <div className="font-bold text-2xl">{store.attributes.name}</div>
-            <Rating rating={store.attributes.rating} />
+            <Rating rating={store.attributes.rating} storeId={store.id} />
           </div>
-          <div>
-            <div className="font-semibold">Best-selling books</div>
+          <div className="border-[1px] border-neutral-200 rounded-sm p-2">
+            <div className="font-semibold mb-1">Best-selling books</div>
             {getTwoBestSellingBooks().length > 0 ? (
               getTwoBestSellingBooks().map((book) => (
                 <Book key={book.id} bookData={book} />
@@ -100,7 +100,7 @@ export default function BookStore({ store }: StoreProps) {
         <img
           src={getFlagUrl(getCountryCode())}
           alt={getCountryCode()}
-          className="h-4"
+          className="h-6"
         />
       </div>
     </div>
