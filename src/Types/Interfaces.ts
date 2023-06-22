@@ -1,10 +1,23 @@
+export interface StoreDataProviderProps {
+  children: React.ReactNode;
+}
+
+export interface StoreDataContextType {
+  storeData?: StoreData | null;
+  setStoreData?:
+    | React.Dispatch<React.SetStateAction<StoreData>>
+    | React.Dispatch<React.SetStateAction<null>>;
+}
+
 export interface StoreData {
   data: Store[];
   included: (Country | Author | Book)[];
+  jsonapi: { version: string };
+  meta: { total: string };
 }
 
 export interface StoreProps {
-  storeData: Store;
+  store: Store;
 }
 
 export interface Store {

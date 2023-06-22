@@ -1,35 +1,14 @@
-import { useEffect, useState } from "react";
+import useStoreData from "./Hooks/useStoreData";
 import BookStore from "./Components/BookStore";
-import { Store } from "./Types/Interfaces";
-import axios from "axios";
 
 function App() {
-  const [stores, setStores] = useState<Store[]>([]);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    fetchStores();
-  }, []);
-
-  const fetchStores = async () => {
-    try {
-      const storesRes = await axios.get("http://localhost:3000/stores");
-      console.log(storesRes);
-      setStores(storesRes.data.data);
-    } catch (err) {
-      let message;
-      if (err instanceof Error) message = err.message;
-      else message = String(err);
-      setError(message);
-    }
-  };
-
+  const { storeData } = useStoreData();
   return (
     <div className="">
       <header>
-        <p className="my-1 mx-4 text-sm text-red-700 h-4">{error}</p>
-        {stores.map((store) => (
-          <BookStore storeData={store} />
+        <p className="my-1 mx-4 text-sm text-red-700 h-4">{}</p>
+        {storeData?.data.map((store) => (
+          <BookStore key={store.id} store={store} />
         ))}
       </header>
     </div>
